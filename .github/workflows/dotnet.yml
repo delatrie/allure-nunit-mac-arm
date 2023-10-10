@@ -1,0 +1,41 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on: workflow_dispatch
+
+jobs:
+  build-old:
+
+    runs-on: macos-13-xlarge
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore Issue391.OldVersion
+    - name: Build
+      run: dotnet build Issue391.OldVersion --no-restore
+    - name: Test
+      run: dotnet test Issue391.OldVersion --no-build --verbosity normal
+
+  build-new:
+
+    runs-on: macos-13-xlarge
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore Issue391.NewVersion
+    - name: Build
+      run: dotnet build Issue391.NewVersion --no-restore
+    - name: Test
+      run: dotnet test Issue391.NewVersion --no-build --verbosity normal
